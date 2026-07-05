@@ -1,7 +1,8 @@
-import { getOrders, getSubscribers } from "@/lib/db";
+import { getOrders, getSubscribers, isUsingSupabase } from "@/lib/db";
 import { getAllProducts } from "@/lib/products";
 import { isStripeConfigured } from "@/lib/stripe";
 import { isPrintfulConfigured } from "@/lib/printful";
+import { isSupabaseConfigured, hasSupabaseServiceRole } from "@/lib/supabase";
 
 export default async function AdminDashboard() {
   const orders = await getOrders();
@@ -51,7 +52,15 @@ export default async function AdminDashboard() {
           </div>
           <div className="border border-neutral-200 bg-white p-4">
             <p className="text-sm font-medium">Supabase</p>
-            <p className="mt-1 text-xs text-neutral-400">Optional — using local JSON store</p>
+            <p className={`mt-1 text-xs ${isUsingSupabase() ? "text-green-600" : "text-neutral-400"}`}>
+              {isUsingSupabase()
+                ? hasSupabaseServiceRole()
+                  ? "Connected (full access)"
+                  : "Connected (limited — add service role for orders)"
+                : isSupabaseConfigured()
+                  ? "Keys set — add service role key"
+                  : "Not configured — using local JSON"}
+            </p>
           </div>
         </div>
       </section>

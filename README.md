@@ -49,8 +49,14 @@ Open [http://localhost:3000](http://localhost:3000).
 3. Set webhook: `https://yourdomain.com/api/webhooks/printful`
 4. Sync products via Admin → Products → Sync from Printful
 
-### Demo Mode
-Without Stripe keys, checkout runs in demo mode — orders save locally to `data/orders.json`.
+### Supabase
+1. Run `supabase/schema.sql` in your [Supabase SQL Editor](https://supabase.com/dashboard/project/fimhfsbwovjgdibftdkx/sql)
+2. Add keys from **Project Settings → API** to `.env.local`
+3. Verify at `/api/supabase/health` or check `/admin` dashboard
+
+Project URL: `https://fimhfsbwovjgdibftdkx.supabase.co`
+
+See `supabase/README.md` for full setup.
 
 ## Discount Codes
 

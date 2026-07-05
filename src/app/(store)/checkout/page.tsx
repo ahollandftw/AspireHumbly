@@ -1,18 +1,49 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { DonationSection } from "@/components/checkout/donation-section";
 import { useCartStore } from "@/store/cart";
 import { formatPrice } from "@/lib/utils";
+import { calculateOrderTotal } from "@/lib/donations";
+import type { DonationBreakdown, DonationOptions } from "@/types";
+
+const SHIPPING_CENTS = 599;
 
 export default function CheckoutPage() {
   const { items, subtotal, discountAmount, discountCode, clearCart } = useCartStore();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const total = Math.max(0, subtotal() - discountAmount);
+  const [donationOptions, setDonationOptions] = useState<DonationOptions>({
+    roundUp: false,
+    customAmountCents: 0,
+  });
+  const [donation, setDonation] = useState<DonationBreakdown>({
+    shirtCount: 0,
+    baseAmount: 0,
+    roundUpAmount: 0,
+    customAmount: 0,
+    total: 0,
+  });
+
+  const subtotalCents = subtotal();
+  const orderTotal = calculateOrderTotal(
+    subtotalCents,
+    discountAmount,
+    SHIPPING_CENTS,
+    donation
+  );
+
+  const handleDonationChange = useCallback(
+    (options: DonationOptions, breakdown: DonationBreakdown) => {
+      setDonationOptions(options);
+      setDonation(breakdown);
+    },
+    []
+  );
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -41,6 +72,7 @@ export default function CheckoutPage() {
           shippingAddress,
           discountCode,
           discountAmount,
+          donation: donationOptions,
         }),
       });
       const data = await res.json();
@@ -122,6 +154,14 @@ export default function CheckoutPage() {
               </div>
             </div>
           </div>
+
+          <DonationSection
+            items={items}
+            subtotalCents={subtotalCents}
+            discountCents={discountAmount}
+            shippingCents={SHIPPING_CENTS}
+            onChange={handleDonationChange}
+          />
         </div>
 
         <div className="h-fit border border-neutral-200 p-8">
@@ -139,7 +179,7 @@ export default function CheckoutPage() {
           <div className="mt-6 space-y-2 border-t border-neutral-200 pt-4 text-sm">
             <div className="flex justify-between">
               <span className="text-neutral-500">Subtotal</span>
-              <span>{formatPrice(subtotal())}</span>
+              <span>{formatPrice(subtotalCents)}</span>
             </div>
             {discountAmount > 0 && (
               <div className="flex justify-between text-green-600">
@@ -149,11 +189,17 @@ export default function CheckoutPage() {
             )}
             <div className="flex justify-between">
               <span className="text-neutral-500">Shipping</span>
-              <span>{formatPrice(599)}</span>
+              <span>{formatPrice(SHIPPING_CENTS)}</span>
             </div>
-            <div className="flex justify-between pt-2 font-medium">
+            {donation.total > 0 && (
+              <div className="flex justify-between text-neutral-700">
+                <span>Habitat for Humanity</span>
+                <span>{formatPrice(donation.total)}</span>
+              </div>
+            )}
+            <div className="flex justify-between border-t border-neutral-200 pt-2 font-medium">
               <span>Total</span>
-              <span>{formatPrice(total + 599)}</span>
+              <span>{formatPrice(orderTotal)}</span>
             </div>
           </div>
           {error && <p className="mt-4 text-sm text-red-500">{error}</p>}

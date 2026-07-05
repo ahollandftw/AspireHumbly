@@ -39,6 +39,7 @@ export function ProductDetail({ product, relatedProducts }: ProductDetailProps) 
       size: selectedSize,
       price: product.price,
       quantity: 1,
+      category: product.category,
       printfulVariantId: selectedVariant.printfulVariantId,
     });
     trackEvent("add_to_cart", {

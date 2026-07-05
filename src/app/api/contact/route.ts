@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { saveContactMessage } from "@/lib/db";
 
 export async function POST(request: Request) {
   try {
@@ -8,7 +9,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "All fields required" }, { status: 400 });
     }
 
-    console.log("Contact form submission:", { name, email, subject, message });
+    await saveContactMessage({ name, email, subject, message });
 
     return NextResponse.json({ success: true });
   } catch (error) {

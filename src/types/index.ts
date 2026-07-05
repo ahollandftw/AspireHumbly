@@ -66,6 +66,7 @@ export interface CartItem {
   size: string;
   price: number;
   quantity: number;
+  category?: string;
   printfulVariantId?: number;
 }
 
@@ -77,6 +78,20 @@ export interface DiscountCode {
   minOrder?: number;
 }
 
+
+export interface DonationOptions {
+  roundUp: boolean;
+  customAmountCents: number;
+}
+
+export interface DonationBreakdown {
+  shirtCount: number;
+  baseAmount: number;
+  roundUpAmount: number;
+  customAmount: number;
+  total: number;
+}
+
 export interface Order {
   id: string;
   email: string;
@@ -84,6 +99,7 @@ export interface Order {
   subtotal: number;
   discount: number;
   shipping: number;
+  donation?: DonationBreakdown;
   total: number;
   status: "pending" | "paid" | "processing" | "shipped" | "delivered" | "cancelled";
   fulfillmentStatus?: string;
