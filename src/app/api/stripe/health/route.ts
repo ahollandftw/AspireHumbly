@@ -11,13 +11,12 @@ export async function GET() {
   }
 
   try {
-    const account = await stripe!.accounts.retrieve();
+    await stripe!.balance.retrieve();
     return NextResponse.json({
       connected: true,
       mode: process.env.STRIPE_SECRET_KEY?.startsWith("sk_live_")
         ? "live"
         : "test",
-      accountId: account.id,
       webhookConfigured: !!process.env.STRIPE_WEBHOOK_SECRET,
       message: "Stripe connected",
     });
