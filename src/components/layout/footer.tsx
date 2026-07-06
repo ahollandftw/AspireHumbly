@@ -51,7 +51,7 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-4 py-16 lg:px-8">
         <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
           <div>
-            <Logo variant="full" size="sm" className="items-start [&_span]:text-white [&_svg]:text-white" />
+            <Logo variant="full" size="sm" />
             <p className="mt-6 text-sm leading-relaxed text-neutral-400">
               Premium apparel for those building quietly and moving with purpose.
             </p>

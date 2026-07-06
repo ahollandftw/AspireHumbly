@@ -6,7 +6,7 @@ import { Logo } from "@/components/brand/logo";
 export function HeroSection() {
   return (
     <section className="relative flex min-h-[90vh] flex-col items-center justify-center bg-white px-4">
-      <Logo variant="full" size="hero" className="animate-in fade-in duration-1000" />
+      <Logo variant="full" size="hero" priority className="animate-in fade-in duration-1000" />
       <h1 className="mt-12 text-center text-4xl font-bold tracking-tight uppercase md:text-6xl lg:text-7xl">
         Work Hard. Stay Humble.
       </h1>

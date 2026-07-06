@@ -30,6 +30,7 @@ export const metadata: Metadata = {
     title: "Aspire Humbly | Premium Motivational Apparel",
     description:
       "Premium apparel for those building quietly and moving with purpose.",
+    images: [{ url: "/brand/aspire-humbly-logo.png", alt: "Aspire Humbly" }],
   },
   twitter: {
     card: "summary_large_image",

@@ -1,67 +1,60 @@
+import Image from "next/image";
 import { cn } from "@/lib/utils";
+
+const LOGO_SRC = "/brand/aspire-humbly-logo.png";
 
 interface LogoProps {
   className?: string;
-  variant?: "full" | "monogram" | "wordmark";
+  /** full = complete mark, compact = cropped for nav/header */
+  variant?: "full" | "compact";
   size?: "sm" | "md" | "lg" | "hero";
+  priority?: boolean;
 }
 
-export function Logo({ className, variant = "full", size = "md" }: LogoProps) {
-  const sizes = {
-    sm: { mono: 32, word: "text-xs", tag: "text-[8px]" },
-    md: { mono: 48, word: "text-sm", tag: "text-[10px]" },
-    lg: { mono: 72, word: "text-base", tag: "text-xs" },
-    hero: { mono: 120, word: "text-xl", tag: "text-sm" },
-  };
+const heights = {
+  sm: 40,
+  md: 56,
+  lg: 80,
+  hero: 160,
+};
 
-  const s = sizes[size];
+export function Logo({
+  className,
+  variant = "full",
+  size = "md",
+  priority = false,
+}: LogoProps) {
+  const height = heights[size];
+  const width = Math.round(height * 0.85);
+
+  if (variant === "compact") {
+    return (
+      <div
+        className={cn("relative overflow-hidden", className)}
+        style={{ width, height }}
+      >
+        <Image
+          src={LOGO_SRC}
+          alt="Aspire Humbly"
+          width={width}
+          height={Math.round(height * 2.2)}
+          className="absolute top-0 left-0 max-w-none object-cover object-top"
+          style={{ width, height: Math.round(height * 2.2) }}
+          priority={priority}
+        />
+      </div>
+    );
+  }
 
   return (
-    <div className={cn("flex flex-col items-center", className)}>
-      {(variant === "full" || variant === "monogram") && (
-        <svg
-          viewBox="0 0 120 80"
-          width={s.mono * 1.5}
-          height={s.mono}
-          aria-label="Aspire Humbly AH monogram"
-          className="text-black"
-        >
-          <text
-            x="60"
-            y="68"
-            textAnchor="middle"
-            fill="currentColor"
-            fontFamily="system-ui, -apple-system, sans-serif"
-            fontWeight="900"
-            fontSize="72"
-            letterSpacing="-4"
-          >
-            AH
-          </text>
-        </svg>
-      )}
-      {(variant === "full" || variant === "wordmark") && (
-        <>
-          <span
-            className={cn(
-              "mt-2 font-medium tracking-[0.35em] text-black uppercase",
-              s.word
-            )}
-          >
-            Aspire Humbly
-          </span>
-          {variant === "full" && (
-            <span
-              className={cn(
-                "mt-2 tracking-[0.25em] text-neutral-500 uppercase",
-                s.tag
-              )}
-            >
-              Work Hard. Stay Humble.
-            </span>
-          )}
-        </>
-      )}
-    </div>
+    <Image
+      src={LOGO_SRC}
+      alt="Aspire Humbly — Work Hard. Stay Humble."
+      width={width}
+      height={height}
+      className={cn("h-auto w-auto object-contain", className)}
+      style={{ height, width: "auto", maxWidth: Math.round(height * 1.1) }}
+      priority={priority}
+    />
   );
 }

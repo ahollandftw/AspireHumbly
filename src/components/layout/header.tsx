@@ -36,7 +36,7 @@ export function Header() {
         </button>
 
         <Link href="/" className="absolute left-1/2 -translate-x-1/2 lg:static lg:translate-x-0">
-          <Logo variant="monogram" size="sm" />
+          <Logo variant="compact" size="sm" />
         </Link>
 
         <nav className="hidden items-center gap-8 lg:flex">
